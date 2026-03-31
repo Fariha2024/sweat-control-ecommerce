@@ -9,7 +9,7 @@ SweatControl is a specialized e-commerce platform designed to sell a single high
  
  
  
-## Design Philosophy
+### Design Philosophy
 
 - **Guest-First**: The system features guest checkout capabilities, No forced registration
 - **Transaction Safety**: Inventory reservation prevents overselling
@@ -94,13 +94,21 @@ Frontend	React	User interface (in development)
 
 ### Service Modules
 Module	Status	Responsibility
+
 Product	✅ Designed	Product catalog, stock management
+
 Cart	✅ Designed	Session-based shopping cart
+
 Order	✅ Designed	Order creation, tracking, state management
+
 Review	✅ Designed	Guest-friendly product reviews
+
 Payment	✅ Designed	Multi-gateway payment processing
+
 Subscription	🔷 Planned	Recurring purchase management
+
 Auth	🔷 Planned	User authentication (optional)
+
 Analytics	🔷 Planned	Event tracking and reporting
 
 
@@ -117,6 +125,7 @@ Analytics	🔷 Planned	Event tracking and reporting
 
 
 ## 3. Working Flow
+
 
 ### User Journey
 Product Discovery
@@ -154,6 +163,7 @@ text
 - **Caching**: Redis (planned)
 - **Queue System**: Bull/Redis (planned)
 
+
 ### Frontend
 - **Framework**: React 18+
 - **State Management**: Redux Toolkit / Context API
@@ -163,7 +173,8 @@ text
 - **Form Handling**: React Hook Form
 - **Payment Integration**: (planned)
 
-## 📊 Database Architecture
+
+### 📊 Database Architecture
 
 The system uses MySQL with a carefully designed schema supporting guest checkout and scalable product management.
 
@@ -349,7 +360,8 @@ CREATE TABLE order_status_logs (
 ```
 
 
-🚀 Installation Guide
+
+### 🚀 Installation Guide
 Prerequisites
 
 . Node.js (v16 or higher)
@@ -361,13 +373,14 @@ Prerequisites
 . Git
 
 
-###🔷 Step 1: Clone the Repository
+### 🔷 Step 1: Clone the Repository
 
 git clone https://github.com/yourusername/sweatcontrol-ecommerce.git
 cd sweatcontrol-ecommerce
 
 
-###🔷 Step 2: Backend Setup
+
+### 🔷 Step 2: Backend Setup
 
 Navigate to backend directory
 cd backend
@@ -379,34 +392,42 @@ Configure environment variables
 cp .env.example .env
 
 Edit .env file:
-# Server Configuration
+
+### Server Configuration
 NODE_ENV=development
 PORT=5000
 
-# Database Configuration
+
+
+### Database Configuration
 DB_HOST=localhost
 DB_PORT=3306
 DB_USER=sweatcontrol_user
 DB_PASSWORD=@BackendSecure2026!
 DB_NAME=sweatcontrol_prod
 
-# JWT Configuration
+
+### JWT Configuration
 JWT_SECRET=your_jwt_secret_key_here
 JWT_EXPIRE=7d
 
-# Payment Gateway Keys
+
+### Payment Gateway Keys
 STRIPE_SECRET_KEY=sk_test_...
 EASYPAISA_MERCHANT_ID=...
 JAZZCASH_MERCHANT_ID=...
 
-# Email Configuration  (Optional - Future Feature)
+
+### Email Configuration  (Optional - Future Feature)
 EMAIL_SERVICE=gmail
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASSWORD=your_app_password
 
-## 📧 Email Notifications (Planned)
+
+#### 📧 Email Notifications (Planned)
 
 Email notifications are planned for future implementation including:
+
 - Order confirmation emails
 - Payment receipt emails
 - Shipping updates
@@ -418,14 +439,16 @@ Initialize database
 mysql -u root -p < database/schema.sql
 Start backend server
 
-# Development mode
+
+### Development mode
 npm run dev
 
-# Production mode
+### Production mode
 npm start
 
 
-###🔷 Step 3: Frontend Setup
+
+### 🔷 Step 3: Frontend Setup
 
 Navigate to frontend directory
 cd ../frontend
@@ -459,10 +482,10 @@ The application will be available at:
 ---
 
 
-📡 API Endpoints
+## 📡 API Endpoints
 
 
-###🔷 Product Routes
+### 🔷 Product Routes
 Method	Endpoint	Description
 GET	/api/products	Get all active products
 GET	/api/products/:id	Get single product details
@@ -470,7 +493,7 @@ GET	/api/products/:id/reviews	Get product reviews
 
 
 
-###🔷 Cart Routes
+### 🔷 Cart Routes
 Method	Endpoint	Description
 POST	/api/cart	Add item to cart
 GET	/api/cart	Get current cart items
@@ -480,33 +503,42 @@ POST	/api/cart/clear	Clear entire cart
 
 
 
-###🔷 Order Routes
+### 🔷 Order Routes
 Method	Endpoint	Description
+
 POST	/api/orders	Create new order
+
 GET	/api/orders/:id	Get order details
+
 POST	/api/orders/:id/cancel	Cancel order
+
 GET	/api/orders/track/:id	Track order status
 
 
 
 
-###🔷 Review Routes
+### 🔷 Review Routes
 Method	Endpoint	Description
+
 POST	/api/reviews	Submit product review
+
 GET	/api/reviews/product/:productId	Get product reviews
 
 
 
 
-###🔷 Payment Routes
+### 🔷 Payment Routes
 Method	Endpoint	Description
+
 POST	/api/payments/initiate	Initiate payment
+
 POST	/api/payments/webhook/:gateway	Payment gateway webhook
+
 GET	/api/payments/status/:transactionId	Check payment status
 
 
 
-🔄 Order Lifecycle
+### 🔄 Order Lifecycle
 The system implements a complete order state machine:
 
 1. PENDING
@@ -524,7 +556,7 @@ The system implements a complete order state machine:
 7. DELIVERED
 
 
-Alternative paths:
+#### Alternative paths:
 
 . PAYMENT_PROCESSING → FAILED → CANCELLED (Stock restored)
 
@@ -535,7 +567,7 @@ Alternative paths:
 
 
 
-🔐 Security Features
+### 🔐 Security Features
 
 . Input Validation: All user inputs sanitized
 
@@ -554,11 +586,11 @@ Alternative paths:
 ---
 
 
-📈 Production-Ready Features
+## 📈 Production-Ready Features
 
-🔷 Inventory Management
+### 🔷 Inventory Management
 
-###🔷 1. Real-time stock tracking
+### 🔷 1. Real-time stock tracking
 
 What: Database always shows exact current stock
 
@@ -574,7 +606,7 @@ Example:
 
 
 
-###🔷 2. Inventory reservation system
+### 🔷 2. Inventory reservation system
 
 What: Temporarily holds stock when customer starts checkout
 
@@ -594,7 +626,7 @@ Table: inventory_reservations stores this data
 
 
 
-###🔷 3. Automatic stock restoration on cancellation
+### 🔷 3. Automatic stock restoration on cancellation
 
 What: Returns stock when order is cancelled
 
@@ -611,7 +643,7 @@ Stock available for other customers
 
 
 
-###🔷 4. Overselling prevention
+### 🔷 4. Overselling prevention
 
 What: System checks stock before allowing purchase
 
@@ -628,23 +660,32 @@ Error message: "Only 10 units available"
 
 
 
-###🔷 How It Works Together
+### 🔷 How It Works Together
 
 Step	Action
-1	Customer views product → Real-time stock shown
-2	Customer clicks checkout → Stock reserved (15 mins)
-3	Customer completes payment → Reserved becomes sold
-4	Customer cancels → Stock restored automatically
-5	Another customer tries to buy more than available → Blocked
+
+1.	Customer views product → Real-time stock shown
+
+2.	Customer clicks checkout → Stock reserved (15 mins)
+
+3.	Customer completes payment → Reserved becomes sold
+
+4.	Customer cancels → Stock restored automatically
+
+5.	Another customer tries to buy more than available → Blocked
 
 
 
-###🔷 Are These Implemented?
+### 🔷 Are These Implemented?
 
-Feature	Status
+Feature	Status 
+
 Real-time stock tracking	⚠️ In database design
+
 Inventory reservation system	✅ Table exists in schema
+
 Stock restoration	⚠️ Needs backend logic
+
 Overselling prevention	⚠️ Needs backend logic
 
 
@@ -654,9 +695,9 @@ The database design is ready for all these features. The backend logic needs to 
 ---
 
 
-🔷 Payment Processing
+## 🔷 Payment Processing
 
-###🔷 1. Idempotency protection against duplicate payments
+### 🔷 1. Idempotency protection against duplicate payments
 
 What: Prevents charging customer twice if they click pay button multiple times
 
@@ -680,7 +721,7 @@ Table: idempotency_key in payment_requests table
 
 
 
-###🔷 2. Payment expiry logic with automatic order cancellation
+### 🔷 2. Payment expiry logic with automatic order cancellation
 
 What: Cancels order if payment not completed within time limit
 
@@ -700,7 +741,7 @@ System automatically:
 
 
 
-###🔷 3. Multi-gateway support
+### 🔷 3. Multi-gateway support
 
 What: Accept payments through multiple services
 
@@ -718,7 +759,7 @@ Table: gateway field in payment_transactions table
 
 
 
-###🔷 4. Webhook event tracking
+### 🔷 4. Webhook event tracking
 
 What: Records all payment gateway responses
 
@@ -741,23 +782,32 @@ Table: raw_gateway_response (JSON) in payment_transactions table
 
 
 
-###🔷 How It Works Together
+### 🔷 How It Works Together
 
 Step	Feature Used
-1	User clicks pay → Idempotency checks for duplicates
-2	Payment initiated → Multi-gateway processes payment
-3	15 minutes pass → Expiry logic cancels if no payment
-4	Gateway responds → Webhook tracking stores all details
+
+1.	User clicks pay → Idempotency checks for duplicates
+
+2.	Payment initiated → Multi-gateway processes payment
+
+3.	15 minutes pass → Expiry logic cancels if no payment
+
+4. Gateway responds → Webhook tracking stores all details
+
 5	Payment confirmed → Order status updated
 
 
 
-###🔷 Are These Implemented?
+### 🔷 Are These Implemented?
 
-Feature	Status
-Idempotency protection	✅ Table exists in your schema
+Feature	Status 
+
+Idempotency protection	✅ Table exists in your schema 
+
 Payment expiry logic	⚠️ Needs backend logic
+
 Multi-gateway support	✅ Gateway field in your schema
+
 Webhook tracking	✅ JSON field in your schema
 
 
@@ -766,9 +816,9 @@ The database design is ready for all these features. The actual payment processi
 
 
 
-🔷 Order Management
+## 🔷 Order Management
 
-###🔷 1. Complete order state machine
+### 🔷 1. Complete order state machine
 
 What: Order has defined stages it moves through, not random status changes
 
@@ -786,7 +836,7 @@ Statuses in the Table: ENUM('pending','payment_processing','paid','confirmed','p
 
 
 
-###🔷 2. Status audit logging
+### 🔷 2. Status audit logging
 
 What: Records every time order status changes, who changed it, and why
 
@@ -794,9 +844,13 @@ Why: Debugging, accountability, and customer service
 
 Example:
 Time	Old Status	New Status	Changed By	Reason
+
 10:00	pending	payment_processing	System	Payment initiated
+
 10:05	payment_processing	paid	System	Payment confirmed
+
 14:00	paid	packed	Admin (Fariha)	Ready to ship
+
 16:00	packed	shipped	Admin (Fariha)	Dispatched
 
 
@@ -804,13 +858,14 @@ Table: order_status_logs
 
 
 
-###🔷 3. Guest order tracking
+### 🔷 3. Guest order tracking
 
 What: Customers without accounts can track their orders
 
 Why: The store doesn't require login to buy
 
 Example:
+
 Guest buys product
    ↓
 Gets order ID and tracking number via email/SMS
@@ -827,7 +882,7 @@ Table: guest_token field in orders table
 
 
 
-###🔷 4. Soft delete support
+### 🔷 4. Soft delete support
 
 What: Records are not permanently deleted, just marked as deleted
 
@@ -853,19 +908,27 @@ Table: is_deleted field in orders table
 ###🔷 How It Works Together
 
 Feature	Purpose
+
 State Machine	Controls allowed status transitions
+
 Audit Logging	Records every status change for accountability
+
 Guest Tracking	Non-logged-in users can track orders
+
 Soft Delete	Never lose data, can restore if needed
 
 
 
-###🔷 Are These Implemented?
+### 🔷 Are These Implemented?
 
 Feature	Status
+
 Order state machine	✅ ENUM status in your schema
+
 Status audit logging	✅ order_status_logs table exists
+
 Guest order tracking	✅ guest_token field exists
+
 Soft delete support	✅ is_deleted field exists
 
 
@@ -874,9 +937,9 @@ The database design is complete for all these features. The backend logic needs 
 
 
 
-🔷 Database Optimization
+## 🔷 Database Optimization
 
-###🔷 1. Strategic indexing for performance
+### 🔷 1. Strategic indexing for performance
 
 What: Creating indexes on frequently searched columns
 
@@ -890,7 +953,7 @@ SELECT * FROM orders WHERE customer_id = 123;
 CREATE INDEX idx_customer_id ON orders(customer_id);
 
 
-Tables That Need Indexes:
+#### Tables That Need Indexes:
 
 . orders.customer_id - searching orders by customer
 
@@ -899,7 +962,7 @@ Tables That Need Indexes:
 . products.product_name - searching products
 
 
-###🔷 2. Foreign key constraints for data integrity
+### 🔷 2. Foreign key constraints for data integrity
 
 What: Rules that prevent orphaned or invalid data
 
@@ -911,7 +974,7 @@ FOREIGN KEY (order_id) REFERENCES orders(id)
 ON DELETE CASCADE  -- If order deleted, its items are also deleted
 
 
-Benefits:
+#### Benefits:
 
 . ❌ Can't add order_item without valid order
 
@@ -930,7 +993,7 @@ In CURRENT Schema:
 
 
 
-###🔷 3. JSON fields for flexible data storage
+### 🔷 3. JSON fields for flexible data storage
 
 What: Storing semi-structured data in JSON format
 
@@ -948,7 +1011,7 @@ product_snapshot JSON
   "image_url": "https://..."
 }
 
-Benefits:
+#### Benefits:
 
 . Product details preserved even if product table changes later
 
@@ -958,7 +1021,7 @@ Benefits:
 
 
 
-###🔷 4. Optimized queries for high traffic
+### 🔷 4. Optimized queries for high traffic
 
 What: Writing efficient SQL queries
 
@@ -976,7 +1039,7 @@ WHERE created_at >= '2024-01-01'
 AND status = 'paid';
 
 
-###🔷 Optimization Tips:
+### 🔷 Optimization Tips:
 
 . Only SELECT columns you need (avoid SELECT *)
 
@@ -992,13 +1055,13 @@ AND status = 'paid';
 --- 
 
 
-🧪 Testing
+### 🧪 Testing
 
 ### Backend Testing
 The backend API is tested using **Postman** for manual and automated API testing.
 
 
-🔧 Postman Testing Setup ( Manual Testing Approach )
+### 🔧 Postman Testing Setup ( Manual Testing Approach )
 
 . Use Postman Collections for API testing
 
@@ -1008,10 +1071,10 @@ The backend API is tested using **Postman** for manual and automated API testing
 
 What You Need to Do
 
-# Just start your server normally
+#### Just start your server normally
 cd backend
 npm start
-# or
+#### or
 npm run dev
 Then test endpoints in Postman:
 
@@ -1020,11 +1083,20 @@ Then test endpoints in Postman:
 ### Essential API Tests in Postman
 
 Feature	Endpoint	Method	Test Data
-Products	http://localhost:5000/api/products	GET	-
+
+Products	http://localhost:5000/api/products	
+GET	-
+
 Add to Cart	http://localhost:5000/api/cart	POST	{"guestToken":"test123","productId":1,"quantity":2}
-View Cart	http://localhost:5000/api/cart?guestToken=test123	GET	-
-Create Order	http://localhost:5000/api/orders	POST	Customer details + guestToken
-Check Order	http://localhost:5000/api/orders/1	GET	-
+
+View Cart	http://localhost:5000/api/cart?guestToken=test123	
+GET	-
+
+Create Order	http://localhost:5000/api/orders	
+POST	Customer details + guestToken
+
+Check Order 	http://localhost:5000/api/orders/1	
+GET	-
 
 
 ---
@@ -1036,38 +1108,38 @@ npm run test:e2e
 
 
 
-🐳 Docker Deployment
+### 🐳 Docker Deployment
 
-# Build and run with Docker Compose
+##### Build and run with Docker Compose
 docker-compose up -d
 
-# View logs
+#### View logs
 docker-compose logs -f
 
-# Stop containers
+#### Stop containers
 docker-compose down
 
 
 
-☁️ Cloud Deployment
+### ☁️ Cloud Deployment
 
 Backend (AWS EC2)
 
-# SSH into EC2 instance
+#### SSH into EC2 instance
 ssh -i key.pem ec2-user@your-instance-ip
 
-# Install Node.js and MySQL
+#### Install Node.js and MySQL
 curl -sL https://rpm.nodesource.com/setup_16.x | sudo bash -
 sudo yum install nodejs mysql-server
 
-# Clone and setup
+#### Clone and setup
 git clone https://github.com/yourusername/sweatcontrol-ecommerce.git
 cd sweatcontrol-ecommerce/backend
 npm install --production
 npm start
 
 
-📝 Development Guidelines
+### 📝 Development Guidelines
 
 Code Style
 
@@ -1078,7 +1150,7 @@ Code Style
 . Write meaningful commit messages
 
 
-Branch Strategy
+### Branch Strategy
 
 . main: Production-ready code
 
@@ -1089,7 +1161,7 @@ Branch Strategy
 . hotfix/*: Critical fixes
 
 
-Pull Request Process
+### Pull Request Process
 
 . Create feature branch from develop
 
@@ -1103,9 +1175,9 @@ Pull Request Process
 
 
 
-🚦 Roadmap
+### 🚦 Roadmap
 
-Phase 1: Core Backend (Completed)
+#### Phase 1: Core Backend (Completed)
 
 . ✅ Database schema design
 
@@ -1115,7 +1187,7 @@ Phase 1: Core Backend (Completed)
 
 
 
-Phase 2: Frontend Development (In Progress)
+#### Phase 2: Frontend Development (In Progress)
 
 
 . 🔄 React application setup
@@ -1126,7 +1198,7 @@ Phase 2: Frontend Development (In Progress)
 
 
 
-Phase 3: Payment Integration (Upcoming)
+#### Phase 3: Payment Integration (Upcoming)
 
 . 📅 Stripe integration
 
@@ -1135,7 +1207,7 @@ Phase 3: Payment Integration (Upcoming)
 . 📅 JazzCash integration
 
 
-Phase 4: Advanced Features (Planned)
+#### Phase 4: Advanced Features (Planned)
 
 . 📊 Analytics dashboard
 
@@ -1147,40 +1219,40 @@ Phase 4: Advanced Features (Planned)
 
 
 
-🤝 Contributing
+### 🤝 Contributing
 
 We welcome contributions! Please see our Contributing Guidelines.
 
 
 
-📄 License
+### 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file.
 
 
 
-## 👥 Credits
+### 👥 Credits
 
 - **Developed by**: Fariha Nizam
 - **Guided by**: Sir Maaz Alam
 - **Learning Platform**: UI Learning
 
 
-## 🙏 Acknowledgments
+### 🙏 Acknowledgments
 
 - Sir Maaz Alam - Special thanks to **Sir Maaz Alam**  For his invaluable mentorship, technical guidance, and continuous support throughout this project
 - UI Learning - Gratitude to **UI Learning** for providing the learning environment
 - Open Source Community - Appreciation to the open source community for creating the tools used in this project
 
 
-## 📞 Support
+### 📞 Support
 
 - **Issues**: Report bugs or request features via [GitHub Issues](https://github.com/yourusername/sweatcontrol-ecommerce/issues)
 - **Contact**: farihanizam50@gmail.com
 
 
 
-## 🔒 Security Note
+### 🔒 Security Note
 
 **This is a production-grade e-commerce platform.** Always follow security best practices:
 
@@ -1195,4 +1267,4 @@ This project is licensed under the MIT License - see the LICENSE file.
 - Monitor logs for suspicious activity
 - Set up automated backups
 
-**Never expose sensitive credentials** in code, logs, or client-side applications.
+#### **Never expose sensitive credentials** in code, logs, or client-side applications.
