@@ -1,10 +1,109 @@
 # SweatControl E-Commerce Platform
 
-A production-grade e-commerce platform specializing in **sweat-control Gel*, * - a premium sweat-control solution. Built with a modular microservices-inspired backend architecture and a modern React frontend.
+A production-grade e-commerce platform specializing in **sweat-control Gel** - a premium sweat-control solution.
 
 ## 📌 Project Overview
 
-SweatControl is a single-product e-commerce platform designed to sell a single high-quality sweat-control gel product, with scalability in mind, supporting future multi-product expansion. The system features guest checkout capabilities, transaction-safe purchase modeling, and comprehensive order lifecycle management.
+SweatControl is a specialized e-commerce platform designed to sell a single high-quality sweat-control gel product.
+ The system is built on a guest-checkout architecture, allowing customers to purchase without mandatory account creation while maintaining complete order tracking capabilities.
+ 
+ 
+ 
+## Design Philosophy
+
+- **Guest-First**: The system features guest checkout capabilities, No forced registration
+- **Transaction Safety**: Inventory reservation prevents overselling
+- **Data Integrity**: Complete audit trail for all operations
+- **Scalability**: The platform is engineered with scalability in mind, supports future multi-product expansion
+
+
+
+ ### Business Logic
+The platform follows a straightforward e-commerce flow:
+1. Customer browses product
+2. Adds to cart (session-based)
+3. Provides checkout information
+4. Completes payment
+5. Receives order confirmation and tracking
+
+
+
+### Key Differentiators
+- Real-time inventory management with reservation system
+- Complete order state machine with audit logging
+- Multi-payment gateway support (Stripe, EasyPaisa, JazzCash)
+- Idempotent payment processing prevents duplicate charges
+
+---
+
+## 2. System Architecture
+ 
+### High-Level Architecture
+
+The backend follows a microservices-inspired modular structure with clear separation of concerns, while the frontend follows a component-based React architecture.
+
+
+sweatcontrol-ecommerce/
+│
+├── backend/                    # Node.js/Express backend API
+│   ├── server.js              # Application entry point
+│   ├── package.json           # Backend dependencies
+│   ├── .env                   # Environment variables
+│   │
+│   ├── config/
+│   │   └── db.js              # Database connection configuration
+│   │
+│   ├── services/              # Microservices-inspired modules
+│   │   ├── product/           # Product management
+│   │   ├── cart/              # Shopping cart operations
+│   │   ├── order/             # Order processing
+│   │   ├── review/            # Product reviews
+│   │   ├── subscription/      # Recurring purchases (future)
+│   │   ├── auth/              # Authentication service (future)
+│   │   └── analytics/         # Event tracking (future)
+│   │
+│   ├── middleware/            # Custom middleware
+│   ├── utils/                 # Utility functions
+│   └── workers/               # Background job processors
+│
+├── frontend/                   # React frontend application (coming soon)
+│   ├── public/                # Static assets
+│   ├── src/
+│   │   ├── components/        # Reusable React components
+│   │   ├── pages/             # Page components
+│   │   ├── hooks/             # Custom React hooks
+│   │   ├── context/           # React context providers
+│   │   ├── services/          # API service calls
+│   │   └── utils/             # Frontend utilities
+│   ├── .env                   # Frontend environment variables
+│   └── package.json           # Frontend dependencies
+│
+├── docker-compose.yml         # Docker configuration
+└── README.md                  # Project documentation
+
+
+### Architecture Overview
+
+Layer	Technology	Purpose
+API Layer	Express.js	Handles HTTP requests, routing, middleware
+Service Layer	Node.js Modules	Business logic, database operations
+Data Layer	MySQL	Persistent storage with ACID compliance
+Frontend	React	User interface (in development)
+
+
+
+### Service Modules
+Module	Status	Responsibility
+Product	✅ Designed	Product catalog, stock management
+Cart	✅ Designed	Session-based shopping cart
+Order	✅ Designed	Order creation, tracking, state management
+Review	✅ Designed	Guest-friendly product reviews
+Payment	✅ Designed	Multi-gateway payment processing
+Subscription	🔷 Planned	Recurring purchase management
+Auth	🔷 Planned	User authentication (optional)
+Analytics	🔷 Planned	Event tracking and reporting
+
+
 
 ### Key Features
 - 🛍️ **Guest Checkout System** - No mandatory account creation
@@ -14,43 +113,33 @@ SweatControl is a single-product e-commerce platform designed to sell a single h
 - ⭐ **Guest Reviews** - Authentication-free product feedback
 - 📊 **Analytics Ready** - Event tracking for business insights
 
-
-## 🏗️ Project Structure
-sweatcontrol-ecommerce/
-├── backend/ # Node.js/Express backend API
-│ ├── server.js # Application entry point
-│ ├── package.json # Backend dependencies
-│ ├── .env # Environment variables
-│ ├── config/
-│ │ └── db.js # Database connection configuration
-│ ├── services/ # Microservices-inspired modules
-│ │ ├── auth/ # Authentication service (future)
-│ │ ├── product/ # Product management
-│ │ ├── cart/ # Shopping cart operations
-│ │ ├── order/ # Order processing
-│ │ ├── review/ # Product reviews
-│ │ ├── subscription/ # Recurring purchases
-│ │ └── analytics/ # Event tracking
-│ ├── middleware/ # Custom middleware
-│ ├── utils/ # Utility functions
-│ └── workers/ # Background job processors
-│
+---
 
 
-├── frontend/ # React frontend application
-│ ├── public/ # Static assets
-│ ├── src/
-│ │ ├── components/ # Reusable React components
-│ │ ├── pages/ # Page components
-│ │ ├── hooks/ # Custom React hooks
-│ │ ├── context/ # React context providers
-│ │ ├── services/ # API service calls
-│ │ └── utils/ # Frontend utilities
-│ ├── .env # Frontend environment variables
-│ └── package.json # Frontend dependencies
-│
-├── docker-compose.yml # Docker configuration
-└── README.md # This file
+## 3. Working Flow
+
+### User Journey
+Product Discovery
+↓
+
+Add to Cart (Session ID generated)
+↓
+
+Checkout Information (Name, Address, Phone)
+↓
+
+Inventory Reservation (15-minute hold)
+↓
+
+Payment Processing (Idempotency check)
+↓
+
+Order Confirmation (Stock deducted)
+↓
+
+Order Tracking (Guest access via phone/order ID)
+
+text
 
 
 ## 🛠️ Technology Stack
@@ -78,6 +167,8 @@ sweatcontrol-ecommerce/
 
 The system uses MySQL with a carefully designed schema supporting guest checkout and scalable product management.
 
+
+
 ### Core Tables
 
 #### Customers Table
@@ -100,10 +191,13 @@ CREATE TABLE customers (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     UNIQUE KEY unique_customer (country_code, phone_number)
 );
+```
 
-Products Table
+
+#### Products Table
 Scalable product structure supporting single or multiple products.
 
+```sql
 CREATE TABLE products (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(255) NOT NULL,
@@ -119,10 +213,13 @@ CREATE TABLE products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+```
 
-Cart Table
+
+#### Cart Table
 Session-based temporary storage supporting guest and registered users.
 
+```sql
 CREATE TABLE carts (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NULL,
@@ -137,10 +234,13 @@ CREATE TABLE carts (
     INDEX idx_guest_token (guest_token),
     INDEX idx_user_id (user_id)
 );
+```
 
-Orders Table
+
+#### Orders Table
 Permanent transaction records with complete lifecycle tracking.
 
+```sql
 CREATE TABLE orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT,
@@ -170,10 +270,13 @@ CREATE TABLE orders (
     INDEX idx_status (status),
     INDEX idx_guest_token (guest_token)
 );
+```
 
-Order Items Table
+
+#### Order Items Table
 Preserves price history and product information at purchase time.
 
+```sql
 CREATE TABLE order_items (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
@@ -185,10 +288,13 @@ CREATE TABLE order_items (
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
+```
 
-Inventory Reservations Table
+
+#### Inventory Reservations Table
 Prevents overselling and manages concurrent checkout flows.
 
+```sql
 CREATE TABLE inventory_reservations (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
@@ -202,10 +308,13 @@ CREATE TABLE inventory_reservations (
     INDEX idx_expires_at (expires_at),
     INDEX idx_status (status)
 );
+```
 
-Payment Transactions Table
+
+#### Payment Transactions Table
 Tracks all payment attempts and gateway responses.
 
+```sql
 CREATE TABLE payment_transactions (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
@@ -219,10 +328,13 @@ CREATE TABLE payment_transactions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (order_id) REFERENCES orders(id)
 );
+```
 
-Order Status Audit Log
+
+#### Order Status Audit Log
 Maintains complete order status change history.
 
+```sql
 CREATE TABLE order_status_logs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     order_id BIGINT NOT NULL,
@@ -234,7 +346,7 @@ CREATE TABLE order_status_logs (
     FOREIGN KEY (order_id) REFERENCES orders(id),
     INDEX idx_order_id (order_id)
 );
-
+```
 
 
 🚀 Installation Guide
@@ -249,13 +361,13 @@ Prerequisites
 . Git
 
 
-Step 1: Clone the Repository
+###🔷 Step 1: Clone the Repository
 
 git clone https://github.com/yourusername/sweatcontrol-ecommerce.git
 cd sweatcontrol-ecommerce
 
 
-Step 2: Backend Setup
+###🔷 Step 2: Backend Setup
 
 Navigate to backend directory
 cd backend
@@ -313,7 +425,7 @@ npm run dev
 npm start
 
 
-Step 3: Frontend Setup
+###🔷 Step 3: Frontend Setup
 
 Navigate to frontend directory
 cd ../frontend
@@ -344,11 +456,13 @@ The application will be available at:
 . Backend API: http://localhost:5000
 
 
+---
+
 
 📡 API Endpoints
 
 
-Product Routes
+###🔷 Product Routes
 Method	Endpoint	Description
 GET	/api/products	Get all active products
 GET	/api/products/:id	Get single product details
@@ -356,7 +470,7 @@ GET	/api/products/:id/reviews	Get product reviews
 
 
 
-Cart Routes
+###🔷 Cart Routes
 Method	Endpoint	Description
 POST	/api/cart	Add item to cart
 GET	/api/cart	Get current cart items
@@ -366,7 +480,7 @@ POST	/api/cart/clear	Clear entire cart
 
 
 
-Order Routes
+###🔷 Order Routes
 Method	Endpoint	Description
 POST	/api/orders	Create new order
 GET	/api/orders/:id	Get order details
@@ -376,7 +490,7 @@ GET	/api/orders/track/:id	Track order status
 
 
 
-Review Routes
+###🔷 Review Routes
 Method	Endpoint	Description
 POST	/api/reviews	Submit product review
 GET	/api/reviews/product/:productId	Get product reviews
@@ -384,7 +498,7 @@ GET	/api/reviews/product/:productId	Get product reviews
 
 
 
-Payment Routes
+###🔷 Payment Routes
 Method	Endpoint	Description
 POST	/api/payments/initiate	Initiate payment
 POST	/api/payments/webhook/:gateway	Payment gateway webhook
@@ -437,48 +551,332 @@ Alternative paths:
 
 . Environment Variables: Sensitive data isolated
 
+---
+
 
 📈 Production-Ready Features
 
 🔷 Inventory Management
 
-. Real-time stock tracking
+###🔷 1. Real-time stock tracking
 
-. Inventory reservation system
+What: Database always shows exact current stock
 
-. Automatic stock restoration on cancellation
+Why: Prevents selling products that are out of stock
 
-. Overselling prevention
+Example:
 
+. Stock = 50 units
+
+. Customer buys 2 → Stock becomes 48 instantly
+
+. Another customer sees 48 available
+
+
+
+###🔷 2. Inventory reservation system
+
+What: Temporarily holds stock when customer starts checkout
+
+Why: Prevents multiple people buying the last item at the same time
+
+Example:
+Customer A adds product to cart and starts checkout
+   ↓
+System reserves 1 unit for 15 minutes
+   ↓
+Stock shows: 50 total → 49 available + 1 reserved
+   ↓
+If Customer A pays → reserved converted to sold
+If Customer A doesn't pay → stock released back after 15 mins
+
+Table: inventory_reservations stores this data
+
+
+
+###🔷 3. Automatic stock restoration on cancellation
+
+What: Returns stock when order is cancelled
+
+Why: Ensures accurate inventory
+
+Example:
+Order placed → Stock reduced
+   ↓
+Customer cancels order
+   ↓
+System automatically adds stock back
+   ↓
+Stock available for other customers
+
+
+
+###🔷 4. Overselling prevention
+
+What: System checks stock before allowing purchase
+
+Why: Never sell more than what you have
+
+Example:
+Product stock = 10 units
+   ↓
+Customer tries to buy 15 units
+   ↓
+System blocks the purchase
+   ↓
+Error message: "Only 10 units available"
+
+
+
+###🔷 How It Works Together
+
+Step	Action
+1	Customer views product → Real-time stock shown
+2	Customer clicks checkout → Stock reserved (15 mins)
+3	Customer completes payment → Reserved becomes sold
+4	Customer cancels → Stock restored automatically
+5	Another customer tries to buy more than available → Blocked
+
+
+
+###🔷 Are These Implemented?
+
+Feature	Status
+Real-time stock tracking	⚠️ In database design
+Inventory reservation system	✅ Table exists in schema
+Stock restoration	⚠️ Needs backend logic
+Overselling prevention	⚠️ Needs backend logic
+
+
+The database design is ready for all these features. The backend logic needs to be implemented in services.
+
+
+---
 
 
 🔷 Payment Processing
 
-. Idempotency protection against duplicate payments
+###🔷 1. Idempotency protection against duplicate payments
 
-. Payment expiry logic with automatic order cancellation
+What: Prevents charging customer twice if they click pay button multiple times
 
-. Multi-gateway support
+Why: Avoids duplicate payments and angry customers
 
-. Webhook event tracking
+Example:
+Customer clicks "Pay Now"
+   ↓
+Payment is processing (slow internet)
+   ↓
+Customer clicks again (thinking it didn't work)
+   ↓
+Idempotency key detects it's the same payment
+   ↓
+System blocks the second attempt
+   ↓
+Customer charged only once
+
+
+Table: idempotency_key in payment_requests table
+
+
+
+###🔷 2. Payment expiry logic with automatic order cancellation
+
+What: Cancels order if payment not completed within time limit
+
+Why: Prevents orders stuck in "pending" forever and releases reserved stock
+
+Example:
+Order created at 10:00 AM
+   ↓
+Payment time limit = 15 minutes
+   ↓
+10:15 AM → No payment received
+   ↓
+System automatically:
+   - Cancels order
+   - Releases reserved stock
+   - Notifies customer
+
+
+
+###🔷 3. Multi-gateway support
+
+What: Accept payments through multiple services
+
+Why: Gives customers payment choices
+
+Example:
+
+Customer selects payment method:
+   ├── Credit Card (Stripe)
+   ├── Bank Transfer (EasyPaisa)
+   └── Mobile Wallet (JazzCash)
+
+
+Table: gateway field in payment_transactions table
+
+
+
+###🔷 4. Webhook event tracking
+
+What: Records all payment gateway responses
+
+Why: Debugging, audit trail, handling payment status updates
+
+Example:
+Payment gateway sends webhook:
+{
+  "status": "success",
+  "transaction_id": "txn_123",
+  "amount": 1499
+}
+   ↓
+System saves entire response in database
+   ↓
+If payment fails, you have full details to investigate
+
+
+Table: raw_gateway_response (JSON) in payment_transactions table
+
+
+
+###🔷 How It Works Together
+
+Step	Feature Used
+1	User clicks pay → Idempotency checks for duplicates
+2	Payment initiated → Multi-gateway processes payment
+3	15 minutes pass → Expiry logic cancels if no payment
+4	Gateway responds → Webhook tracking stores all details
+5	Payment confirmed → Order status updated
+
+
+
+###🔷 Are These Implemented?
+
+Feature	Status
+Idempotency protection	✅ Table exists in your schema
+Payment expiry logic	⚠️ Needs backend logic
+Multi-gateway support	✅ Gateway field in your schema
+Webhook tracking	✅ JSON field in your schema
+
+
+The database design is ready for all these features. The actual payment processing logic needs to be implemented in backend services.
+
 
 
 
 🔷 Order Management
 
-Complete order state machine
+###🔷 1. Complete order state machine
 
-. Status audit logging
+What: Order has defined stages it moves through, not random status changes
 
-. Guest order tracking
+Why: Ensures orders follow correct workflow
 
-. Soft delete support
+Example:
+pending → payment_processing → paid → confirmed → packed → shipped → delivered
+    ↓
+cancelled (if payment fails or user cancels)
+    ↓
+refunded (if user returns)
+
+
+Statuses in the Table: ENUM('pending','payment_processing','paid','confirmed','packed','shipped','delivered','cancelled','refunded')
+
+
+
+###🔷 2. Status audit logging
+
+What: Records every time order status changes, who changed it, and why
+
+Why: Debugging, accountability, and customer service
+
+Example:
+Time	Old Status	New Status	Changed By	Reason
+10:00	pending	payment_processing	System	Payment initiated
+10:05	payment_processing	paid	System	Payment confirmed
+14:00	paid	packed	Admin (Fariha)	Ready to ship
+16:00	packed	shipped	Admin (Fariha)	Dispatched
+
+
+Table: order_status_logs
+
+
+
+###🔷 3. Guest order tracking
+
+What: Customers without accounts can track their orders
+
+Why: The store doesn't require login to buy
+
+Example:
+Guest buys product
+   ↓
+Gets order ID and tracking number via email/SMS
+   ↓
+Visits website: "Track Order"
+   ↓
+Enters order ID + phone number
+   ↓
+Sees order status: "Your order has been shipped"
+
+
+Table: guest_token field in orders table
+
+
+
+
+###🔷 4. Soft delete support
+
+What: Records are not permanently deleted, just marked as deleted
+
+Why:
+
+. Can recover if accidentally deleted
+
+. Keep data for reports/analytics
+
+. Customer service can see past orders
+
+Example:
+-- ❌ Hard Delete (lose data forever)
+DELETE FROM orders WHERE id = 123;
+
+-- ✅ Soft Delete (data kept but hidden)
+UPDATE orders SET is_deleted = true WHERE id = 123;
+
+Table: is_deleted field in orders table
+
+
+
+###🔷 How It Works Together
+
+Feature	Purpose
+State Machine	Controls allowed status transitions
+Audit Logging	Records every status change for accountability
+Guest Tracking	Non-logged-in users can track orders
+Soft Delete	Never lose data, can restore if needed
+
+
+
+###🔷 Are These Implemented?
+
+Feature	Status
+Order state machine	✅ ENUM status in your schema
+Status audit logging	✅ order_status_logs table exists
+Guest order tracking	✅ guest_token field exists
+Soft delete support	✅ is_deleted field exists
+
+
+The database design is complete for all these features. The backend logic needs to be implemented in services.
+
 
 
 
 🔷 Database Optimization
 
-1. Strategic indexing for performance
+###🔷 1. Strategic indexing for performance
 
 What: Creating indexes on frequently searched columns
 
@@ -501,7 +899,7 @@ Tables That Need Indexes:
 . products.product_name - searching products
 
 
-2. Foreign key constraints for data integrity
+###🔷 2. Foreign key constraints for data integrity
 
 What: Rules that prevent orphaned or invalid data
 
@@ -532,7 +930,7 @@ In CURRENT Schema:
 
 
 
-3. JSON fields for flexible data storage
+###🔷 3. JSON fields for flexible data storage
 
 What: Storing semi-structured data in JSON format
 
@@ -560,7 +958,7 @@ Benefits:
 
 
 
-4. Optimized queries for high traffic
+###🔷 4. Optimized queries for high traffic
 
 What: Writing efficient SQL queries
 
@@ -578,7 +976,7 @@ WHERE created_at >= '2024-01-01'
 AND status = 'paid';
 
 
-Optimization Tips:
+###🔷 Optimization Tips:
 
 . Only SELECT columns you need (avoid SELECT *)
 
@@ -590,6 +988,8 @@ Optimization Tips:
 
 . Use JOINs instead of multiple queries
 
+
+--- 
 
 
 🧪 Testing
@@ -627,7 +1027,7 @@ Create Order	http://localhost:5000/api/orders	POST	Customer details + guestToken
 Check Order	http://localhost:5000/api/orders/1	GET	-
 
 
-
+---
 
 ### Frontend Testing
 cd frontend
