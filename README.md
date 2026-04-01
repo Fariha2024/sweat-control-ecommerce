@@ -85,10 +85,14 @@ sweatcontrol-ecommerce/
 ### Architecture Overview
 
 Layer	Technology	Purpose
-API Layer	Express.js	Handles HTTP requests, routing, middleware
-Service Layer	Node.js Modules	Business logic, database operations
-Data Layer	MySQL	Persistent storage with ACID compliance
-Frontend	React	User interface (in development)
+
+. API Layer	Express.js	Handles HTTP requests, routing, middleware
+
+. Service Layer	Node.js Modules	Business logic, database operations
+
+. Data Layer	MySQL	Persistent storage with ACID compliance
+
+. Frontend	React	User interface (in development)
 
 
 

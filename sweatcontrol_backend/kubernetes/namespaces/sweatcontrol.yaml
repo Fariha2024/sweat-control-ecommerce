@@ -1,0 +1,9 @@
+@'
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sweatcontrol
+  labels:
+    name: sweatcontrol
+    environment: production
+'@ | Out-File -FilePath kubernetes\namespaces\sweatcontrol.yaml -Encoding utf8

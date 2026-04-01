@@ -1,0 +1,348 @@
+@'
+version: '3.8'
+
+networks:
+  sweatcontrol-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:
+  kafka_data:
+  zookeeper_data:
+
+services:
+  # ==================== MySQL Database ====================
+  mysql:
+    image: mysql:8.0
+    container_name: sweatcontrol-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword123}
+      MYSQL_DATABASE: sweatcontrol_products_db
+      MYSQL_USER: sweatcontrol_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-@BackendSecure2026!}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./shared/sql/init:/docker-entrypoint-initdb.d
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== Redis Cache ====================
+  redis:
+    image: redis:7-alpine
+    container_name: sweatcontrol-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== Kafka & Zookeeper ====================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: sweatcontrol-zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: sweatcontrol-kafka
+    restart: unless-stopped
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==================== Kafka UI (Optional) ====================
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: sweatcontrol-kafka-ui
+    restart: unless-stopped
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+    ports:
+      - "8080:8080"
+    networks:
+      - sweatcontrol-network
+    profiles:
+      - monitoring
+
+  # ==================== Product Service ====================
+  product-service:
+    build: ./product-service
+    container_name: sweatcontrol-product-service
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=sweatcontrol_user
+      - DB_PASSWORD=${MYSQL_PASSWORD:-@BackendSecure2026!}
+      - DB_NAME=sweatcontrol_products_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== Cart Service ====================
+  cart-service:
+    build: ./cart-service
+    container_name: sweatcontrol-cart-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=sweatcontrol_user
+      - DB_PASSWORD=${MYSQL_PASSWORD:-@BackendSecure2026!}
+      - DB_NAME=sweatcontrol_carts_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PRODUCT_SERVICE_URL=http://product-service:3001
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      product-service:
+        condition: service_healthy
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== Order Service ====================
+  order-service:
+    build: ./order-service
+    container_name: sweatcontrol-order-service
+    restart: unless-stopped
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=sweatcontrol_user
+      - DB_PASSWORD=${MYSQL_PASSWORD:-@BackendSecure2026!}
+      - DB_NAME=sweatcontrol_orders_db
+      - KAFKA_BROKERS=kafka:9092
+      - CART_SERVICE_URL=http://cart-service:3002
+      - INVENTORY_SERVICE_URL=http://inventory-service:3004
+      - PRODUCT_SERVICE_URL=http://product-service:3001
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      cart-service:
+        condition: service_healthy
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== Inventory Service ====================
+  inventory-service:
+    build: ./inventory-service
+    container_name: sweatcontrol-inventory-service
+    restart: unless-stopped
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=sweatcontrol_user
+      - DB_PASSWORD=${MYSQL_PASSWORD:-@BackendSecure2026!}
+      - DB_NAME=sweatcontrol_inventory_db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== Payment Service ====================
+  payment-service:
+    build: ./payment-service
+    container_name: sweatcontrol-payment-service
+    restart: unless-stopped
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=sweatcontrol_user
+      - DB_PASSWORD=${MYSQL_PASSWORD:-@BackendSecure2026!}
+      - DB_NAME=sweatcontrol_payments_db
+      - KAFKA_BROKERS=kafka:9092
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - EASYPAISA_MERCHANT_ID=${EASYPAISA_MERCHANT_ID}
+      - JAZZCASH_MERCHANT_ID=${JAZZCASH_MERCHANT_ID}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== Notification Service ====================
+  notification-service:
+    build: ./notification-service
+    container_name: sweatcontrol-notification-service
+    restart: unless-stopped
+    ports:
+      - "3006:3006"
+    environment:
+      - NODE_ENV=production
+      - PORT=3006
+      - KAFKA_BROKERS=kafka:9092
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==================== API Gateway ====================
+  api-gateway:
+    build: ./api-gateway
+    container_name: sweatcontrol-api-gateway
+    restart: unless-stopped
+    ports:
+      - "80:3000"
+      - "443:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - PRODUCT_SERVICE_URL=http://product-service:3001
+      - CART_SERVICE_URL=http://cart-service:3002
+      - ORDER_SERVICE_URL=http://order-service:3003
+      - INVENTORY_SERVICE_URL=http://inventory-service:3004
+      - PAYMENT_SERVICE_URL=http://payment-service:3005
+      - NOTIFICATION_SERVICE_URL=http://notification-service:3006
+    depends_on:
+      product-service:
+        condition: service_healthy
+      cart-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+      inventory-service:
+        condition: service_healthy
+      payment-service:
+        condition: service_healthy
+      notification-service:
+        condition: service_healthy
+    networks:
+      - sweatcontrol-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+'@ | Out-File -FilePath docker-compose.yml -Encoding utf8

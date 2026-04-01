@@ -1,0 +1,95 @@
+@'
+version: '3.8'
+
+# Development overrides for docker-compose
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  # Enable hot reload for development
+  product-service:
+    build:
+      context: ./product-service
+      target: builder
+    volumes:
+      - ./product-service:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  cart-service:
+    build:
+      context: ./cart-service
+      target: builder
+    volumes:
+      - ./cart-service:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  order-service:
+    build:
+      context: ./order-service
+      target: builder
+    volumes:
+      - ./order-service:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  inventory-service:
+    build:
+      context: ./inventory-service
+      target: builder
+    volumes:
+      - ./inventory-service:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  payment-service:
+    build:
+      context: ./payment-service
+      target: builder
+    volumes:
+      - ./payment-service:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  notification-service:
+    build:
+      context: ./notification-service
+      target: builder
+    volumes:
+      - ./notification-service:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      target: builder
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  # Expose additional ports for debugging
+  mysql:
+    ports:
+      - "33060:3306"
+
+  kafka-ui:
+    profiles:
+      - monitoring
+      - dev
+'@ | Out-File -FilePath docker-compose.dev.yml -Encoding utf8
