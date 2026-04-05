@@ -1,4 +1,4 @@
-@'
+
 const orderService = require('../services/order.service');
 const { success, error } = require('../utils/response');
 const logger = require('../utils/logger');
@@ -96,4 +96,3 @@ class OrderController {
 }
 
 module.exports = new OrderController();
-'@ | Out-File -FilePath src\controllers\order.controller.js -Encoding utf8

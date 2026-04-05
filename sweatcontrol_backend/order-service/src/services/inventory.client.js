@@ -1,4 +1,4 @@
-@'
+
 const axios = require('axios');
 const logger = require('../utils/logger');
 
@@ -82,4 +82,3 @@ class InventoryClient {
 }
 
 module.exports = new InventoryClient();
-'@ | Out-File -FilePath src\services\inventory.client.js -Encoding utf8

@@ -1,4 +1,4 @@
-@'
+
 const logger = require('../utils/logger');
 
 const ORDER_STATUS = {
@@ -84,4 +84,3 @@ class StateMachine {
 }
 
 module.exports = { StateMachine, ORDER_STATUS };
-'@ | Out-File -FilePath src\services\state-machine.js -Encoding utf8

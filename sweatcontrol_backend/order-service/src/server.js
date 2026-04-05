@@ -1,8 +1,8 @@
-# Navigate to order-service
-cd C:\Users\muham\sweat-control-ecommerce\sweatcontrol_backend\order-service
+const dotenv = require('dotenv');
+const path = require('path');
 
-# Create server.js
-@'
+// Load .env FIRST
+dotenv.config({ path: path.join(__dirname, '../.env') });
 const app = require('./app');
 const { connectDB } = require('./config/db');
 const { connectKafka } = require('./config/kafka');
@@ -81,4 +81,3 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 startServer();
-'@ | Out-File -FilePath src\server.js -Encoding utf8

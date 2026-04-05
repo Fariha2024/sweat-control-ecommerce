@@ -1,4 +1,4 @@
-@'
+
 const Joi = require('joi');
 const { error } = require('../utils/response');
 
@@ -32,4 +32,3 @@ function validate(schema, property = 'body') {
 }
 
 module.exports = { validate };
-'@ | Out-File -FilePath src\middleware\validation.js -Encoding utf8

@@ -1,4 +1,4 @@
-@'
+
 const { getPool } = require('../config/db');
 const logger = require('../utils/logger');
 
@@ -144,4 +144,3 @@ class Order {
 }
 
 module.exports = { Order, ORDER_STATUS, ALLOWED_TRANSITIONS };
-'@ | Out-File -FilePath src\models\Order.js -Encoding utf8

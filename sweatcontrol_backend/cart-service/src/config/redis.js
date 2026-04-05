@@ -1,4 +1,4 @@
-@'
+
 const Redis = require('redis');
 const logger = require('../utils/logger');
 
@@ -76,4 +76,3 @@ module.exports = {
   deleteSession,
   invalidateCartCache 
 };
-'@ | Out-File -FilePath src\config\redis.js -Encoding utf8

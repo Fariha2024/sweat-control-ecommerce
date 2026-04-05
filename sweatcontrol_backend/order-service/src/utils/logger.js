@@ -1,4 +1,4 @@
-@'
+
 const winston = require('winston');
 const path = require('path');
 
@@ -45,4 +45,3 @@ const logger = winston.createLogger({
 });
 
 module.exports = logger;
-'@ | Out-File -FilePath src\utils\logger.js -Encoding utf8

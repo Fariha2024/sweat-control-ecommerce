@@ -1,10 +1,21 @@
-const mysql = require('mysql2/promise');
+﻿const mysql = require('mysql2/promise');
+const dotenv = require('dotenv');
+const path = require('path');
+
+// Load .env from the root of the service
+dotenv.config({ path: path.join(__dirname, '../../.env') });
+
 const logger = require('../utils/logger');
 
 let pool = null;
 
 async function connectDB() {
   try {
+    // Debug: Check if env variables are loaded
+    console.log('DB_HOST:', process.env.DB_HOST);
+    console.log('DB_USER:', process.env.DB_USER);
+    console.log('DB_NAME:', process.env.DB_NAME);
+
     pool = mysql.createPool({
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT) || 3306,
@@ -12,20 +23,15 @@ async function connectDB() {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       waitForConnections: true,
-      connectionLimit: 20,
-      queueLimit: 0,
-      enableKeepAlive: true,
-      keepAliveInitialDelay: 10000,
-      acquireTimeout: 60000,
-      timeout: 60000,
+      connectionLimit: 10,
+      queueLimit: 0
     });
 
-    // Test connection
     const connection = await pool.getConnection();
     await connection.ping();
     connection.release();
 
-    logger.info(`✅ MySQL connected to ${process.env.DB_NAME} on ${process.env.DB_HOST}`);
+    logger.info(`✅ MySQL connected to ${process.env.DB_NAME}`);
     return pool;
 
   } catch (error) {
@@ -36,16 +42,9 @@ async function connectDB() {
 
 function getPool() {
   if (!pool) {
-    throw new Error('Database not initialized. Call connectDB() first.');
+    throw new Error('Database not initialized');
   }
   return pool;
 }
 
-async function closePool() {
-  if (pool) {
-    await pool.end();
-    logger.info('MySQL pool closed');
-  }
-}
-
-module.exports = { connectDB, getPool, closePool };
+module.exports = { connectDB, getPool };

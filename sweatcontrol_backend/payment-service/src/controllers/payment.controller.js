@@ -1,4 +1,4 @@
-@'
+
 const paymentService = require('../services/payment.service');
 const { success, error } = require('../utils/response');
 const logger = require('../utils/logger');
@@ -56,4 +56,3 @@ class PaymentController {
 }
 
 module.exports = new PaymentController();
-'@ | Out-File -FilePath src\controllers\payment.controller.js -Encoding utf8

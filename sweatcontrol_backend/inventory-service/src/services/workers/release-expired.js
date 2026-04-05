@@ -1,4 +1,4 @@
-@'
+
 const cron = require('node-cron');
 const reservationService = require('../reservation.service');
 const logger = require('../../utils/logger');
@@ -25,4 +25,3 @@ class ReleaseExpiredWorker {
 }
 
 module.exports = new ReleaseExpiredWorker();
-'@ | Out-File -FilePath src\services\workers\release-expired.js -Encoding utf8

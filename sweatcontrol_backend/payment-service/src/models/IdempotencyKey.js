@@ -1,4 +1,4 @@
-@'
+
 const { getPool } = require('../config/db');
 const logger = require('../utils/logger');
 
@@ -52,4 +52,3 @@ class IdempotencyKey {
 }
 
 module.exports = IdempotencyKey;
-'@ | Out-File -FilePath src\models\IdempotencyKey.js -Encoding utf8

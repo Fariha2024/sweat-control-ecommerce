@@ -1,4 +1,4 @@
-@'
+
 const Redis = require('redis');
 const logger = require('../utils/logger');
 
@@ -65,4 +65,3 @@ async function invalidateStockCache(productId) {
 }
 
 module.exports = { connectRedis, getRedis, getStockCache, setStockCache, invalidateStockCache };
-'@ | Out-File -FilePath src\config\redis.js -Encoding utf8

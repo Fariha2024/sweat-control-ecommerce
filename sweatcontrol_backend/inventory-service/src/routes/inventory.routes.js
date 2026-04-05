@@ -1,4 +1,4 @@
-@'
+
 const express = require('express');
 const router = express.Router();
 const inventoryController = require('../controllers/inventory.controller');
@@ -40,4 +40,3 @@ router.get('/low-stock/list', inventoryController.getLowStock);
 router.get('/stats/reservations', inventoryController.getReservationStats);
 
 module.exports = router;
-'@ | Out-File -FilePath src\routes\inventory.routes.js -Encoding utf8

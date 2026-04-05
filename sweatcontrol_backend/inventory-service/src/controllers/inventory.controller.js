@@ -1,4 +1,4 @@
-@'
+
 const inventoryService = require('../services/inventory.service');
 const reservationService = require('../services/reservation.service');
 const { success, error } = require('../utils/response');
@@ -87,4 +87,3 @@ class InventoryController {
 }
 
 module.exports = new InventoryController();
-'@ | Out-File -FilePath src\controllers\inventory.controller.js -Encoding utf8

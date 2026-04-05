@@ -46,3 +46,5 @@ ENTRYPOINT ["/sbin/tini", "--"]
 
 # Start the service
 CMD ["node", "src/server.js"]
+
+Password ["@Fatimaali5"]

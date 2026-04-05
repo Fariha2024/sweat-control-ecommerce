@@ -1,4 +1,4 @@
-@'
+
 /**
  * Notification Service Setup Script
  * Run: npm run setup
@@ -29,4 +29,3 @@ console.log('\x1b[33m💬 To enable SMS, configure TWILIO_ACCOUNT_SID and TWILIO
 console.log('\x1b[36m🚀 Start the service with: npm run dev\x1b[0m');
 console.log('\x1b[36m📧 Test email with: npm run test:email recipient@example.com\x1b[0m');
 console.log('\x1b[36m💬 Test SMS with: npm run test:sms +923001234567\x1b[0m');
-'@ | Out-File -FilePath scripts\setup.js -Encoding utf8

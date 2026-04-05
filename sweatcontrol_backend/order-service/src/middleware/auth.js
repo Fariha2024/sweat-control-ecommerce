@@ -1,4 +1,4 @@
-@'
+
 const { error } = require('../utils/response');
 const logger = require('../utils/logger');
 
@@ -51,4 +51,3 @@ function requireAdmin(req, res, next) {
 }
 
 module.exports = { authenticateService, authenticateUser, requireAdmin };
-'@ | Out-File -FilePath src\middleware\auth.js -Encoding utf8

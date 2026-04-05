@@ -1,4 +1,4 @@
-@'
+
 /**
  * Shared Winston Logger Configuration
  * Used across all microservices for consistent logging
@@ -60,4 +60,3 @@ function createLogger(serviceName) {
 }
 
 module.exports = { createLogger };
-'@ | Out-File -FilePath utils\logger.js -Encoding utf8

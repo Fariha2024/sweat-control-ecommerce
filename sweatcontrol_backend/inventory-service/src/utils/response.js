@@ -1,5 +1,4 @@
-// This file ensures ALL API responses look the same
-// Think of it as the "uniform" for your API
+
 
 function success(res, data, message = 'Success', statusCode = 200) {
   return res.status(statusCode).json({

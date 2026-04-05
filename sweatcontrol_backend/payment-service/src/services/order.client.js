@@ -1,4 +1,4 @@
-@'
+
 const axios = require('axios');
 const logger = require('../utils/logger');
 
@@ -60,4 +60,3 @@ class OrderClient {
 }
 
 module.exports = new OrderClient();
-'@ | Out-File -FilePath src\services\order.client.js -Encoding utf8

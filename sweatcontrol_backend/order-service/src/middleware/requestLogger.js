@@ -1,4 +1,4 @@
-@'
+
 const morgan = require('morgan');
 const logger = require('../utils/logger');
 
@@ -24,4 +24,3 @@ const requestLogger = morgan(
 );
 
 module.exports = requestLogger;
-'@ | Out-File -FilePath src\middleware\requestLogger.js -Encoding utf8

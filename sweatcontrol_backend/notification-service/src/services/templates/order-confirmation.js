@@ -1,4 +1,4 @@
-@'
+
 function generateOrderConfirmationEmail(order) {
   const itemsHtml = order.items.map(item => `
     <tr>
@@ -84,4 +84,3 @@ function generateOrderConfirmationSMS(order) {
 }
 
 module.exports = { generateOrderConfirmationEmail, generateOrderConfirmationSMS };
-'@ | Out-File -FilePath src\services\templates\order-confirmation.js -Encoding utf8

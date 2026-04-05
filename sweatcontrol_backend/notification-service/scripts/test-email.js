@@ -1,5 +1,4 @@
-@'
-#!/usr/bin/env node
+
 
 /**
  * Test Email Script
@@ -48,4 +47,3 @@ async function testEmail() {
 }
 
 testEmail().catch(console.error);
-'@ | Out-File -FilePath scripts\test-email.js -Encoding utf8

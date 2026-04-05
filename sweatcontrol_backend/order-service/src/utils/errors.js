@@ -1,4 +1,4 @@
-@'
+
 class NotFoundError extends Error {
   constructor(message) {
     super(message);
@@ -61,4 +61,3 @@ module.exports = {
   UnauthorizedError,
   ForbiddenError
 };
-'@ | Out-File -FilePath src\utils\errors.js -Encoding utf8

@@ -1,5 +1,4 @@
-@'
-#!/usr/bin/env node
+
 
 /**
  * Test SMS Script
@@ -40,4 +39,3 @@ async function testSMS() {
 }
 
 testSMS().catch(console.error);
-'@ | Out-File -FilePath scripts\test-sms.js -Encoding utf8

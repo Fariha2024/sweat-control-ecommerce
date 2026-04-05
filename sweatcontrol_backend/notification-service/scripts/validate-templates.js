@@ -1,5 +1,4 @@
-@'
-#!/usr/bin/env node
+
 
 /**
  * Template Validation Script
@@ -93,4 +92,3 @@ try {
 }
 
 console.log('\n✅ Template validation complete!');
-'@ | Out-File -FilePath scripts\validate-templates.js -Encoding utf8

@@ -1,4 +1,4 @@
-@'
+
 -- Create database
 CREATE DATABASE IF NOT EXISTS sweatcontrol_inventory_db;
 USE sweatcontrol_inventory_db;
@@ -51,4 +51,3 @@ INSERT INTO stock (product_id, quantity, reserved_quantity, low_stock_threshold)
 (2, 300, 0, 10),
 (3, 200, 0, 10)
 ON DUPLICATE KEY UPDATE quantity = VALUES(quantity);
-'@ | Out-File -FilePath scripts\init-db.sql -Encoding utf8

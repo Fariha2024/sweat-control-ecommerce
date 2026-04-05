@@ -1,5 +1,4 @@
-@'
-#!/usr/bin/env node
+
 
 /**
  * Health Check Script for Docker/Kubernetes
@@ -57,4 +56,3 @@ request.on('timeout', () => {
 });
 
 request.end();
-'@ | Out-File -FilePath scripts\health-check.js -Encoding utf8

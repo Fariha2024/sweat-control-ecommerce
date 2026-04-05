@@ -1,4 +1,4 @@
-@'
+
 const Transaction = require('../models/Transaction');
 const IdempotencyKey = require('../models/IdempotencyKey');
 const orderClient = require('./order.client');
@@ -196,4 +196,3 @@ class PaymentService {
 }
 
 module.exports = new PaymentService();
-'@ | Out-File -FilePath src\services\payment.service.js -Encoding utf8

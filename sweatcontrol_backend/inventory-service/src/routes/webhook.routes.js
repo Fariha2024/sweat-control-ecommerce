@@ -1,4 +1,4 @@
-@'
+
 const express = require('express');
 const router = express.Router();
 const webhookService = require('../services/webhook.service');
@@ -49,4 +49,3 @@ router.post('/test', async (req, res) => {
 });
 
 module.exports = router;
-'@ | Out-File -FilePath src\routes\webhook.routes.js -Encoding utf8

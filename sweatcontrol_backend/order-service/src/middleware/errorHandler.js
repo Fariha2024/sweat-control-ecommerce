@@ -1,4 +1,4 @@
-@'
+
 const { error } = require('../utils/response');
 const logger = require('../utils/logger');
 
@@ -44,4 +44,3 @@ function errorHandler(err, req, res, next) {
 }
 
 module.exports = errorHandler;
-'@ | Out-File -FilePath src\middleware\errorHandler.js -Encoding utf8

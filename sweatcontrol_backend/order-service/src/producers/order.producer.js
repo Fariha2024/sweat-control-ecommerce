@@ -1,4 +1,4 @@
-@'
+
 const { sendEvent } = require('../config/kafka');
 const logger = require('../utils/logger');
 
@@ -65,4 +65,3 @@ class OrderProducer {
 }
 
 module.exports = new OrderProducer();
-'@ | Out-File -FilePath src\producers\order.producer.js -Encoding utf8

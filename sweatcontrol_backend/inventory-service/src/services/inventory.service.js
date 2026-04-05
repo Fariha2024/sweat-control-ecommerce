@@ -1,4 +1,4 @@
-@'
+
 const Stock = require('../models/Stock');
 const Reservation = require('../models/Reservation');
 const { transaction } = require('../config/db');
@@ -167,4 +167,3 @@ class InventoryService {
 }
 
 module.exports = new InventoryService();
-'@ | Out-File -FilePath src\services\inventory.service.js -Encoding utf8

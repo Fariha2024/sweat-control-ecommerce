@@ -1,4 +1,4 @@
-@'
+
 -- Create database
 CREATE DATABASE IF NOT EXISTS sweatcontrol_payments_db;
 USE sweatcontrol_payments_db;
@@ -50,4 +50,3 @@ CREATE TABLE IF NOT EXISTS payment_method_logs (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_order_id (order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-'@ | Out-File -FilePath scripts\init-db.sql -Encoding utf8

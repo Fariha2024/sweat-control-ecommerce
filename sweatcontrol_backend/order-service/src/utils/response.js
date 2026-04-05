@@ -1,4 +1,4 @@
-@'
+
 function success(res, data, message = 'Success', statusCode = 200) {
   return res.status(statusCode).json({
     success: true,
@@ -23,4 +23,3 @@ function error(res, message, statusCode = 400, errors = null) {
 }
 
 module.exports = { success, error };
-'@ | Out-File -FilePath src\utils\response.js -Encoding utf8

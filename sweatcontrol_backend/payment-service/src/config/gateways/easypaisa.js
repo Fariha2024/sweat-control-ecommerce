@@ -1,4 +1,4 @@
-@'
+
 const axios = require('axios');
 const crypto = require('crypto');
 const logger = require('../../utils/logger');
@@ -63,4 +63,3 @@ class EasyPaisaGateway {
 }
 
 module.exports = new EasyPaisaGateway();
-'@ | Out-File -FilePath src\config\gateways\easypaisa.js -Encoding utf8

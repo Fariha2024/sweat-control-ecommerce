@@ -1,4 +1,4 @@
-@'
+
 const mysql = require('mysql2/promise');
 const logger = require('../utils/logger');
 
@@ -56,4 +56,3 @@ async function transaction(callback) {
 }
 
 module.exports = { connectDB, getPool, transaction };
-'@ | Out-File -FilePath src\config\db.js -Encoding utf8

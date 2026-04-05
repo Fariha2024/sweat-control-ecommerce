@@ -1,4 +1,4 @@
-@'
+
 FROM node:20-alpine AS builder
 
 WORKDIR /app
@@ -29,4 +29,3 @@ EXPOSE 3004
 ENTRYPOINT ["/sbin/tini", "--"]
 
 CMD ["node", "src/server.js"]
-'@ | Out-File -FilePath Dockerfile -Encoding utf8

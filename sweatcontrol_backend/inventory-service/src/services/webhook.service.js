@@ -1,4 +1,4 @@
-@'
+
 const Transaction = require('../models/Transaction');
 const { sendEvent } = require('../config/kafka');
 const orderClient = require('./order.client');
@@ -143,4 +143,3 @@ class WebhookService {
 }
 
 module.exports = new WebhookService();
-'@ | Out-File -FilePath src\services\webhook.service.js -Encoding utf8

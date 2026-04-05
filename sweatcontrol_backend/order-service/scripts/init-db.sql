@@ -1,4 +1,4 @@
-@'
+
 -- Create database
 CREATE DATABASE IF NOT EXISTS sweatcontrol_orders_db;
 USE sweatcontrol_orders_db;
@@ -80,4 +80,3 @@ CREATE TABLE IF NOT EXISTS order_status_logs (
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
     INDEX idx_order_id (order_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-'@ | Out-File -FilePath scripts\init-db.sql -Encoding utf8

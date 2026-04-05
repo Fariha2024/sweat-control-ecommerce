@@ -1,4 +1,4 @@
-@'
+
 const cron = require('node-cron');
 const Stock = require('../../models/Stock');
 const { invalidateStockCache } = require('../../config/redis');
@@ -31,4 +31,3 @@ class SyncStockWorker {
 }
 
 module.exports = new SyncStockWorker();
-'@ | Out-File -FilePath src\services\workers\sync-stock.js -Encoding utf8

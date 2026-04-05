@@ -1,4 +1,4 @@
-@'
+
 const { Kafka } = require('kafkajs');
 const logger = require('../utils/logger');
 
@@ -59,4 +59,3 @@ async function sendEvent(topic, event) {
 }
 
 module.exports = { connectKafka, sendEvent };
-'@ | Out-File -FilePath src\config\kafka.js -Encoding utf8

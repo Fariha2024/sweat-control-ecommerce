@@ -1,4 +1,4 @@
-@'
+
 const express = require('express');
 const router = express.Router();
 const cartController = require('../controllers/cart.controller');
@@ -28,4 +28,3 @@ router.delete('/:id', cartController.removeCartItem);
 router.post('/clear', validate(clearCartSchema), cartController.clearCart);
 
 module.exports = router;
-'@ | Out-File -FilePath src\routes\cart.routes.js -Encoding utf8

@@ -1,4 +1,10 @@
-@'
+const dotenv = require('dotenv');
+const path = require('path');
+
+// Load .env FIRST
+dotenv.config({ path: path.join(__dirname, '../.env') });
+
+
 const app = require('./app');
 const { connectEmail } = require('./config/email');
 const { connectSMS } = require('./config/sms');
@@ -71,4 +77,3 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 startServer();
-'@ | Out-File -FilePath src\server.js -Encoding utf8

@@ -1,9 +1,8 @@
-@'
+
 const mysql = require('mysql2/promise');
 const logger = require('../utils/logger');
 
 let pool = null;
-
 async function connectDB() {
   try {
     pool = mysql.createPool({
@@ -38,4 +37,3 @@ function getPool() {
 }
 
 module.exports = { connectDB, getPool };
-'@ | Out-File -FilePath src\config\db.js -Encoding utf8

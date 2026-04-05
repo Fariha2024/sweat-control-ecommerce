@@ -1,4 +1,4 @@
-@'
+
 const { transaction } = require('../config/db');
 const { Order, ORDER_STATUS } = require('../models/Order');
 const OrderItem = require('../models/OrderItem');
@@ -210,4 +210,3 @@ class OrderService {
 }
 
 module.exports = new OrderService();
-'@ | Out-File -FilePath src\services\order.service.js -Encoding utf8

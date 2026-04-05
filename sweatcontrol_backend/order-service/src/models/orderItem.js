@@ -1,4 +1,4 @@
-@'
+
 const { getPool } = require('../config/db');
 
 class OrderItem {
@@ -34,4 +34,3 @@ class OrderItem {
 }
 
 module.exports = OrderItem;
-'@ | Out-File -FilePath src\models\OrderItem.js -Encoding utf8

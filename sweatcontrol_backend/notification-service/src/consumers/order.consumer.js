@@ -1,4 +1,4 @@
-@'
+
 const { consumeEvents } = require('../config/kafka');
 const emailService = require('../services/email.service');
 const smsService = require('../services/sms.service');
@@ -36,4 +36,3 @@ class OrderConsumer {
 }
 
 module.exports = new OrderConsumer();
-'@ | Out-File -FilePath src\consumers\order.consumer.js -Encoding utf8

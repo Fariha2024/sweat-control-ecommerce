@@ -1,4 +1,4 @@
-@'
+
 const { getPool } = require('../config/db');
 const logger = require('../utils/logger');
 
@@ -76,4 +76,3 @@ class Transaction {
 }
 
 module.exports = Transaction;
-'@ | Out-File -FilePath src\models\Transaction.js -Encoding utf8

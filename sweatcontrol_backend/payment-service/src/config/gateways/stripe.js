@@ -1,4 +1,4 @@
-@'
+
 const logger = require('../../utils/logger');
 
 class StripeGateway {
@@ -73,4 +73,3 @@ class StripeGateway {
 }
 
 module.exports = new StripeGateway();
-'@ | Out-File -FilePath src\config\gateways\stripe.js -Encoding utf8

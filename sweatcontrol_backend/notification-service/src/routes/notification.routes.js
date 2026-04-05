@@ -1,4 +1,65 @@
-@'
+
+
+const express = require('express');
+const router = express.Router();
+
+// Health check
+router.get('/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    service: 'notification-service',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Test email endpoint
+router.post('/test/email', async (req, res) => {
+  try {
+    const { to, subject, message } = req.body;
+    
+    if (!to || !subject || !message) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'to, subject, and message are required' 
+      });
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Test email sent (mock)', 
+      data: { to, subject }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Test SMS endpoint
+router.post('/test/sms', async (req, res) => {
+  try {
+    const { to, message } = req.body;
+    
+    if (!to || !message) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'to and message are required' 
+      });
+    }
+    
+    res.json({ 
+      success: true, 
+      message: 'Test SMS sent (mock)', 
+      data: { to }
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+module.exports = router;
+
+
+/** 
 const express = require('express');
 const router = express.Router();
 const emailService = require('../services/email.service');
@@ -52,4 +113,4 @@ router.get('/health', (req, res) => {
 });
 
 module.exports = router;
-'@ | Out-File -FilePath src\routes\notification.routes.js -Encoding utf8
+*/

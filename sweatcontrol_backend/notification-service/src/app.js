@@ -1,4 +1,4 @@
-@'
+
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -60,4 +60,3 @@ app.use('*', (req, res) => {
 app.use(errorHandler);
 
 module.exports = app;
-'@ | Out-File -FilePath src\app.js -Encoding utf8

@@ -1,4 +1,4 @@
-@'
+
 const express = require('express');
 const router = express.Router();
 const paymentController = require('../controllers/payment.controller');
@@ -22,4 +22,3 @@ router.post('/refund/:transactionId', validate(refundPaymentSchema), paymentCont
 router.get('/order/:orderId', paymentController.getOrderPayments);
 
 module.exports = router;
-'@ | Out-File -FilePath src\routes\payment.routes.js -Encoding utf8

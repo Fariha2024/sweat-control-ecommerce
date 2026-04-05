@@ -1,4 +1,4 @@
-@'
+
 const cartService = require('../services/cart.service');
 const { success, error } = require('../utils/response');
 const logger = require('../utils/logger');
@@ -79,4 +79,3 @@ class CartController {
 }
 
 module.exports = new CartController();
-'@ | Out-File -FilePath src\controllers\cart.controller.js -Encoding utf8

@@ -1,4 +1,4 @@
-@'
+
 const Cart = require('../models/Cart');
 const axios = require('axios');
 const { v4: uuidv4 } = require('uuid');
@@ -112,4 +112,3 @@ class CartService {
 }
 
 module.exports = new CartService();
-'@ | Out-File -FilePath src\services\cart.service.js -Encoding utf8

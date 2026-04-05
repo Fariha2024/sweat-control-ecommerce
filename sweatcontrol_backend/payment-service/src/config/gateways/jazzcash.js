@@ -1,4 +1,4 @@
-@'
+
 const axios = require('axios');
 const crypto = require('crypto');
 const logger = require('../../utils/logger');
@@ -70,4 +70,3 @@ class JazzCashGateway {
 }
 
 module.exports = new JazzCashGateway();
-'@ | Out-File -FilePath src\config\gateways\jazzcash.js -Encoding utf8

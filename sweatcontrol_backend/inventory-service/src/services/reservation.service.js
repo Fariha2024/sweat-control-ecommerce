@@ -1,4 +1,4 @@
-@'
+
 const Reservation = require('../models/Reservation');
 const Stock = require('../models/Stock');
 const { transaction } = require('../config/db');
@@ -66,4 +66,3 @@ class ReservationService {
 }
 
 module.exports = new ReservationService();
-'@ | Out-File -FilePath src\services\reservation.service.js -Encoding utf8

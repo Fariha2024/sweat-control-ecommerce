@@ -1,4 +1,4 @@
-@'
+
 -- Create database if not exists
 CREATE DATABASE IF NOT EXISTS sweatcontrol_carts_db;
 USE sweatcontrol_carts_db;
@@ -29,4 +29,3 @@ CREATE TABLE IF NOT EXISTS cart_history (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_guest_token (guest_token)
 );
-'@ | Out-File -FilePath scripts\init-db.sql -Encoding utf8

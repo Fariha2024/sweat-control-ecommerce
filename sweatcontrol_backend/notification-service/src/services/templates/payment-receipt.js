@@ -1,4 +1,4 @@
-@'
+
 function generatePaymentReceiptEmail(payment, order) {
   return {
     subject: `Payment Receipt - Order #${order.id}`,
@@ -48,4 +48,3 @@ function generatePaymentReceiptSMS(payment, order) {
 }
 
 module.exports = { generatePaymentReceiptEmail, generatePaymentReceiptSMS };
-'@ | Out-File -FilePath src\services\templates\payment-receipt.js -Encoding utf8

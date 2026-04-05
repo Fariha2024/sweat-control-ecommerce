@@ -1,4 +1,4 @@
-@'
+
 const twilio = require('twilio');
 const logger = require('../utils/logger');
 
@@ -52,4 +52,3 @@ function getClient() {
 }
 
 module.exports = { connectSMS, sendSMS, getClient };
-'@ | Out-File -FilePath src\config\sms.js -Encoding utf8

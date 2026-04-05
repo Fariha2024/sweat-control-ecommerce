@@ -1,4 +1,4 @@
-@'
+
 /**
  * Shared Error Classes
  * Used across all microservices for consistent error handling
@@ -120,4 +120,3 @@ module.exports = {
   isAppError,
   formatError
 };
-'@ | Out-File -FilePath utils\errors.js -Encoding utf8

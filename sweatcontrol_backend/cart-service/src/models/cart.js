@@ -1,21 +1,19 @@
-@'
-const { getDB } = require('../config/db');
+
+const { getPool } = require('../config/db');
 const logger = require('../utils/logger');
 
 class Cart {
   static async addItem(guestToken, productId, quantity, priceSnapshot) {
-    const db = getDB();
+    const db = getPool();
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + (parseInt(process.env.CART_EXPIRY_DAYS) || 7));
     
-    // Check if item already exists in cart
     const [existing] = await db.execute(
       'SELECT id, quantity FROM carts WHERE guest_token = ? AND product_id = ? AND status = "active"',
       [guestToken, productId]
     );
     
     if (existing.length > 0) {
-      // Update existing item
       const newQuantity = existing[0].quantity + quantity;
       await db.execute(
         'UPDATE carts SET quantity = ?, updated_at = NOW() WHERE id = ?',
@@ -23,7 +21,6 @@ class Cart {
       );
       return this.findByGuestToken(guestToken);
     } else {
-      // Add new item
       await db.execute(
         `INSERT INTO carts (guest_token, product_id, quantity, price_snapshot, expires_at) 
          VALUES (?, ?, ?, ?, ?)`,
@@ -34,7 +31,7 @@ class Cart {
   }
   
   static async findByGuestToken(guestToken) {
-    const db = getDB();
+    const db = getPool();
     
     const [rows] = await db.execute(
       `SELECT id, product_id, quantity, price_snapshot, created_at, expires_at
@@ -48,7 +45,7 @@ class Cart {
   }
   
   static async updateQuantity(cartId, quantity) {
-    const db = getDB();
+    const db = getPool();
     
     await db.execute(
       'UPDATE carts SET quantity = ?, updated_at = NOW() WHERE id = ?',
@@ -64,7 +61,7 @@ class Cart {
   }
   
   static async removeItem(cartId) {
-    const db = getDB();
+    const db = getPool();
     
     await db.execute(
       'DELETE FROM carts WHERE id = ?',
@@ -75,7 +72,7 @@ class Cart {
   }
   
   static async clearCart(guestToken) {
-    const db = getDB();
+    const db = getPool();
     
     await db.execute(
       'UPDATE carts SET status = "abandoned" WHERE guest_token = ? AND status = "active"',
@@ -86,7 +83,7 @@ class Cart {
   }
   
   static async getCartTotal(guestToken) {
-    const db = getDB();
+    const db = getPool();
     
     const [rows] = await db.execute(
       'SELECT SUM(quantity * price_snapshot) as total FROM carts WHERE guest_token = ? AND status = "active"',
@@ -98,4 +95,3 @@ class Cart {
 }
 
 module.exports = Cart;
-'@ | Out-File -FilePath src\models\Cart.js -Encoding utf8

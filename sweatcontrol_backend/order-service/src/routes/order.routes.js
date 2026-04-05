@@ -1,4 +1,4 @@
-@'
+
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/order.controller');
@@ -48,4 +48,3 @@ router.get('/:id/track', validate(trackOrderSchema, 'query'), orderController.tr
 router.put('/:id/status', validate(updateStatusSchema), orderController.updateOrderStatus);
 
 module.exports = router;
-'@ | Out-File -FilePath src\routes\order.routes.js -Encoding utf8

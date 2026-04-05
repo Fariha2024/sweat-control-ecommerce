@@ -1,4 +1,4 @@
-@'
+
 const nodemailer = require('nodemailer');
 const logger = require('../utils/logger');
 
@@ -65,4 +65,3 @@ function getTransporter() {
 }
 
 module.exports = { connectEmail, sendEmail, getTransporter };
-'@ | Out-File -FilePath src\config\email.js -Encoding utf8
